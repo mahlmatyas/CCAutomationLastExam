@@ -23,31 +23,27 @@ public class SeleniumEasyTest {
     public WebDriver driver;
 
     @BeforeEach
-    public void Setup()
-    {
+    public void Setup() {
         System.setProperty("webdriver.chrome.driver", "C:/webdriver/chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless"); // github action-nál át kell állítanom
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
-
         driver = new ChromeDriver(options);
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
     }
 
 
     @Test
-    public void TestTwoInputs()
-    {
+    public void TestTwoInputs() {
         driver.navigate().to("https://www.seleniumeasy.com/test/basic-first-form-demo.html");
         TwoInputs twoInputs = new TwoInputs(driver);
 
         String a = "2";
         String b = "4";
 
-        Integer expected = twoInputs.twoFieldsAddResult(a,b);
+        Integer expected = twoInputs.twoFieldsAddResult(a, b);
         Integer result = 6;
 
         Assertions.assertEquals(expected, result);
@@ -61,8 +57,7 @@ public class SeleniumEasyTest {
     }
 
     @Test
-    public void TestDaySelectionList()
-    {
+    public void TestDaySelectionList() {
         driver.navigate().to("https://www.seleniumeasy.com/test/basic-select-dropdown-demo.html");
         SelectDay selectDay = new SelectDay(driver);
         String expected = "Sunday";
@@ -81,8 +76,7 @@ public class SeleniumEasyTest {
 
 
     @Test
-    public void TestAlertPopUp()
-    {
+    public void TestAlertPopUp() {
         driver.navigate().to("https://www.seleniumeasy.com/test/bootstrap-modal-demo.html#");
         PopUp popUp = new PopUp(driver);
 
@@ -100,8 +94,7 @@ public class SeleniumEasyTest {
     }
 
     @Test
-    public void TestNameCards()
-    {
+    public void TestNameCards() {
         driver.navigate().to("https://www.seleniumeasy.com/test/data-list-filter-demo.html");
         CompareNames compareNames = new CompareNames(driver);
 
@@ -125,17 +118,14 @@ public class SeleniumEasyTest {
     }
 
     @Test
-    public void TestTableContent()
-    {
+    public void TestTableContent() {
         driver.navigate().to("https://www.seleniumeasy.com/test/data-list-filter-demo.html");
         int lines = 0;
         try {
             BufferedReader reader = new BufferedReader(new FileReader("names.txt"));
             while (reader.readLine() != null) lines++;
             reader.close();
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -149,8 +139,7 @@ public class SeleniumEasyTest {
     }
 
     @AfterEach
-    public void Close()
-    {
+    public void Close() {
         driver.quit();
     }
 
