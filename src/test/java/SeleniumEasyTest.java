@@ -85,7 +85,6 @@ public class SeleniumEasyTest {
     {
         driver.navigate().to("https://www.seleniumeasy.com/test/bootstrap-modal-demo.html#");
         PopUp popUp = new PopUp(driver);
-        popUp.popUpClose();
 
         String result = popUp.popUpClose();
         String expected = "This is the place";
