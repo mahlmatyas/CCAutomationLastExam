@@ -27,7 +27,7 @@ public class SeleniumEasyTest {
     {
         System.setProperty("webdriver.chrome.driver", "C:/webdriver/chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
-        //options.addArguments("--headless"); // github action-nál át kell állítanom
+        options.addArguments("--headless"); // github action-nál át kell állítanom
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
 
