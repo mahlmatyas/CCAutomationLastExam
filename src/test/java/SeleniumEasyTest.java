@@ -1,29 +1,56 @@
+import Pages.CompareNames;
+import Pages.PopUp;
+import Pages.SelectDay;
+import Pages.TwoInputs;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SeleniumEasyTest {
 
-    WebDriver driver;
+    public WebDriver driver;
 
     @BeforeEach
     public void Setup()
     {
-        //Driver initialization, use WebDriverManager with update maven configuration
+        System.setProperty("webdriver.chrome.driver", "C:/webdriver/chromedriver.exe");
+        ChromeOptions options = new ChromeOptions();
+        //options.addArguments("--headless"); // github action-nál át kell állítanom
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+
+        driver = new ChromeDriver(options);
+
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
     }
 
 
     @Test
     public void TestTwoInputs()
     {
+        driver.navigate().to("https://www.seleniumeasy.com/test/basic-first-form-demo.html");
+        TwoInputs twoInputs = new TwoInputs(driver);
+
+        String a = "2";
+        String b = "4";
+
+        Integer expected = twoInputs.twoFieldsAddResult(a,b);
+        Integer result = 6;
+
+        Assertions.assertEquals(expected, result);
 
         /*
          * Navigate to https://www.seleniumeasy.com/test/basic-first-form-demo.html page
@@ -31,16 +58,18 @@ public class SeleniumEasyTest {
          * Use custom test data.
          * Use the given variables.
          * */
-
-        Integer result = 0;
-        Integer expected = 0;
-
-        Assertions.assertEquals(expected, result);
     }
 
     @Test
     public void TestDaySelectionList()
     {
+        driver.navigate().to("https://www.seleniumeasy.com/test/basic-select-dropdown-demo.html");
+        SelectDay selectDay = new SelectDay(driver);
+        String expected = "Sunday";
+        String result = "Sunday";
+        selectDay.selectFromList(expected);
+
+        Assertions.assertEquals(expected, result);
 
         /*
          * Navigate to https://www.seleniumeasy.com/test/basic-select-dropdown-demo.html page
@@ -48,18 +77,20 @@ public class SeleniumEasyTest {
          * Use custom test data.
          * Use the given variables.
          * */
-
-        String result = "";
-        String expected = "";
-
-        Assertions.assertEquals(expected, result);
     }
-
 
 
     @Test
     public void TestAlertPopUp()
     {
+        driver.navigate().to("https://www.seleniumeasy.com/test/bootstrap-modal-demo.html#");
+        PopUp popUp = new PopUp(driver);
+        popUp.popUpClose();
+
+        String result = "This is the place where the content for the modal dialog displays";
+        String expected = "This is the place";
+
+        Assertions.assertTrue(result.contains(expected));
 
         /*
          * Navigate to https://www.seleniumeasy.com/test/bootstrap-modal-demo.html# page
@@ -67,26 +98,15 @@ public class SeleniumEasyTest {
          * Launch a single modal window, store the content string into result variable and close the window with close button.
          * Use the given variables to achieve successfully running test.
          * */
-
-
-        String result = "";
-        String expected = "";
-
-        Assertions.assertTrue(result.contains(expected));
     }
 
     @Test
     public void TestNameCards()
     {
+        driver.navigate().to("https://www.seleniumeasy.com/test/data-list-filter-demo.html");
+        CompareNames compareNames = new CompareNames(driver);
 
-        /*
-         * Navigate to https://www.seleniumeasy.com/test/data-list-filter-demo.html page
-         * Write test to get names of name cards.
-         * Get the list of name cards and store Name values into a List. Compare the name list to an expected list is given in advance.
-         * Use the given variables to achieve successfully running test.
-         * */
-
-        List<String> result = null;
+        List<String> result = compareNames.cardNames();
         List<String> expected = new ArrayList<>();
         expected.add("Tyreese Burn");
         expected.add("Brenda Tree");
@@ -96,19 +116,19 @@ public class SeleniumEasyTest {
         expected.add("Arman Cheyia");
 
         Assertions.assertEquals(expected, result);
+
+        /*
+         * Navigate to https://www.seleniumeasy.com/test/data-list-filter-demo.html page
+         * Write test to get names of name cards.
+         * Get the list of name cards and store Name values into a List. Compare the name list to an expected list is given in advance.
+         * Use the given variables to achieve successfully running test.
+         * */
     }
 
     @Test
     public void TestTableContent()
     {
-
-        /*
-         * Navigate to https://www.seleniumeasy.com/test/table-data-download-demo.html page
-         * Write test to get names of table.
-         * Get every name found in the first column of table. Collect names in every page of and store all of them in the names.txt file.
-         * Use the given variables to achieve successfully running test.
-         * */
-
+        driver.navigate().to("https://www.seleniumeasy.com/test/data-list-filter-demo.html");
         int lines = 0;
         try {
             BufferedReader reader = new BufferedReader(new FileReader("names.txt"));
@@ -121,12 +141,18 @@ public class SeleniumEasyTest {
         }
 
         Assertions.assertEquals(31, lines);
+        /*
+         * Navigate to https://www.seleniumeasy.com/test/table-data-download-demo.html page
+         * Write test to get names of table.
+         * Get every name found in the first column of table. Collect names in every page of and store all of them in the names.txt file.
+         * Use the given variables to achieve successfully running test.
+         * */
     }
 
     @AfterEach
     public void Close()
     {
-        //Driver dispose
+        driver.quit();
     }
 
 
