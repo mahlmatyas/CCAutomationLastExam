@@ -87,7 +87,7 @@ public class SeleniumEasyTest {
         PopUp popUp = new PopUp(driver);
         popUp.popUpClose();
 
-        String result = "This is the place where the content for the modal dialog displays";
+        String result = popUp.popUpClose();
         String expected = "This is the place";
 
         Assertions.assertTrue(result.contains(expected));
