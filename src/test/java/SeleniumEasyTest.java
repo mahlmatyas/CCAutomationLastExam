@@ -26,14 +26,13 @@ public class SeleniumEasyTest {
     public void Setup() {
         System.setProperty("webdriver.chrome.driver", "C:/webdriver/chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless"); // github action-nál át kell állítanom
+        //options.addArguments("--headless"); // github action-nál át kell állítanom
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
         driver = new ChromeDriver(options);
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
-
 
     @Test
     public void TestTwoInputs() {
@@ -60,11 +59,12 @@ public class SeleniumEasyTest {
     public void TestDaySelectionList() {
         driver.navigate().to("https://www.seleniumeasy.com/test/basic-select-dropdown-demo.html");
         SelectDay selectDay = new SelectDay(driver);
-        String expected = "Sunday";
-        String result = "Sunday";
-        selectDay.selectFromList(expected);
 
-        Assertions.assertEquals(expected, result);
+        String expected = "Friday"; //fucking day selector
+        selectDay.selectDayFromList(expected);
+        String result = selectDay.displayedDay();
+
+        Assertions.assertEquals(expected,result);
 
         /*
          * Navigate to https://www.seleniumeasy.com/test/basic-select-dropdown-demo.html page
@@ -72,8 +72,9 @@ public class SeleniumEasyTest {
          * Use custom test data.
          * Use the given variables.
          * */
+        System.out.println("Result: "+result);
+        System.out.println("Expected: "+expected);
     }
-
 
     @Test
     public void TestAlertPopUp() {
@@ -142,6 +143,4 @@ public class SeleniumEasyTest {
     public void Close() {
         driver.quit();
     }
-
-
 }
